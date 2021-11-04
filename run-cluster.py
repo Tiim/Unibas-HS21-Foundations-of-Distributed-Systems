@@ -6,7 +6,7 @@ os.system("rm -rf storage")
 os.system("pkill -f LogCabin --echo")
 os.system("pkill -f Reconfigure --echo")
 
-number = 10
+number = 4
 
 for i in range(1, number+1):
   cmd = ["build/LogCabin", "--config", "logcabin-" + str(i) + ".conf"]

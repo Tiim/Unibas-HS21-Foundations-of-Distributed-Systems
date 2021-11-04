@@ -7,7 +7,7 @@ cfile = open("cluster.txt", "r")
 CLUSTER=cfile.read()
 cfile.close()
 
-NUMBER=10
+NUMBER=1800
 
 timeStarted = time.time()
 
@@ -20,7 +20,6 @@ for i in range(NUMBER):
   print(" > testdata "+ str(i) )
   p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
   p.communicate(input="testdata " + str(i))
-  
   processes.append(p)
 
 
@@ -30,5 +29,4 @@ for p in processes:
   p.wait()
 
 timeDelta = time.time() - timeStarted
-print("Finished process in "+str(timeDelta)+" seconds.")  
-
+print("Finished process in "+str(timeDelta)+" seconds.")

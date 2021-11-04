@@ -1,9 +1,24 @@
 filename = "logcabin-NR.conf"
 
+SNAPSHOT = True
+
+
 config = """
 serverId = NR
 listenAddresses = 127.0.0.1:PORT
 """
+
+
+snapshot_config = """
+
+snapshotMinLogSize = 10
+snapshotRatio = 1
+
+"""
+
+if SNAPSHOT:
+  config = config + snapshot_config
+
 
 START_PORT=5254
 
