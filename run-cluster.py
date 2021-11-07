@@ -3,9 +3,9 @@ import os
 import sys
 
 
-os.system("rm -rf storage")
 os.system("pkill -f LogCabin --echo")
 os.system("pkill -f Reconfigure --echo")
+os.system("rm -rf storage")
 
 number = 6
 if len(sys.argv) > 1:
@@ -37,9 +37,12 @@ cmd = ["build/Examples/Reconfigure", "--cluster=" + allservers_comma, "set"]
 cmd.extend(allservers)
 
 print(" ".join(cmd))
-subprocess.Popen(cmd)
+p = subprocess.Popen(cmd)
+p.wait()
 
-
+if ("--nonblocking" in sys.argv):
+  print("Exiting")
+  exit(0)
 
 raw_input("Press Enter to exit...")
 

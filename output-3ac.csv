@@ -1,0 +1,13 @@
+snapshot, commands, size
+False,500,77376
+False,1000,154767
+False,1500,232156
+False,2000,309546
+False,2500,386936
+False,3000,464326
+True,500,1
+True,1000,1
+True,1500,1
+True,2000,12508
+True,2500,26327
+True,3000,1

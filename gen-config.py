@@ -2,7 +2,9 @@ import sys
 
 filename = "logcabin-NR.conf"
 
-SNAPSHOT = True
+SNAPSHOT = False
+if "--snapshot" in sys.argv:
+  SNAPSHOT = True
 
 
 number = 20
