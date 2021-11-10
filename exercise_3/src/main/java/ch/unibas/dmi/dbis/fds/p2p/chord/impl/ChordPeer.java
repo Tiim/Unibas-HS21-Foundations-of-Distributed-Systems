@@ -37,8 +37,8 @@ public class ChordPeer extends AbstractChordPeer {
    */
   @Override
   public ChordNode findSuccessor(ChordNode caller, Identifier id) {
-    /* TODO: Implementation required. */
-    throw new RuntimeException("This method has not been implemented!");
+    var pred = findPredecessor(caller, id);
+    return pred.successor();
   }
 
   /**
@@ -52,8 +52,13 @@ public class ChordPeer extends AbstractChordPeer {
    */
   @Override
   public ChordNode findPredecessor(ChordNode caller, Identifier id) {
-    /* TODO: Implementation required. */
-    throw new RuntimeException("This method has not been implemented!");
+    ChordNode n = this;
+    System.out.println("while");
+    while (id.getIndex() > n.id().getIndex() && id.getIndex() < n.successor().id().getIndex()) {
+      n = n.closestPrecedingFinger(caller, id);
+    }
+
+    return n;
   }
 
   /**
@@ -67,8 +72,18 @@ public class ChordPeer extends AbstractChordPeer {
    */
   @Override
   public ChordNode closestPrecedingFinger(ChordNode caller, Identifier id) {
-    /* TODO: Implementation required. */
-    throw new RuntimeException("This method has not been implemented!");
+    var m = this.getNetwork().getNbits();
+    for(int i = m; i >= 1; i--) {
+      var ft = this.getFingerTable().node(i);
+      if (ft.isEmpty()) {
+        continue;
+      }
+      var fingerTableEntry = ft.get();
+      if ( fingerTableEntry.id().getIndex() < this.id().getIndex() && fingerTableEntry.id().getIndex() > id.getIndex() ) {
+        return fingerTableEntry;
+      }
+    }
+    return this;
   }
 
   /**
@@ -87,7 +102,17 @@ public class ChordPeer extends AbstractChordPeer {
     if (nprime != null) {
       initFingerTable(nprime);
       updateOthers();
-      /* TODO: Move keys. */
+      var succ = successor();
+      var keys = succ.keys();
+      for (var key : keys) {
+        if (Integer.parseInt(key) <= id().getIndex()) {
+          var value = succ.lookup(this, key);
+          store(this, key, value.get());
+          succ.delete(this, key);
+        }
+      }
+
+
     } else {
       for (int i = 1; i <= getNetwork().getNbits(); i++) {
         this.fingerTable.setNode(i, this);
@@ -125,8 +150,24 @@ public class ChordPeer extends AbstractChordPeer {
    * @param nprime Arbitrary {@link ChordNode} that is part of the network.
    */
   private void initFingerTable(ChordNode nprime) {
-    /* TODO: Implementation required. */
-    throw new RuntimeException("This method has not been implemented!");
+    var circle = getNetwork().getIdentifierCircle();
+    var id = circle.getIdentifierAt(fingerTable.start(1));
+    fingerTable.setNode(1, nprime.findSuccessor(this,id));
+
+    setPredecessor(fingerTable.successor().predecessor());
+    fingerTable.successor().setPredecessor(this);
+
+    var m = getNetwork().getNbits();
+    for (int i = 1; i < m; i++) {
+      var fstart = fingerTable.start(i+1);
+      if (circle.getIdentifierAt(fstart).getIndex() >= this.id().getIndex() &&
+              circle.getIdentifierAt(fstart).getIndex() < fingerTable.node(i).get().id().getIndex()
+      ) {
+        fingerTable.setNode(i+1, fingerTable.node(i).get());
+      } else {
+        fingerTable.setNode(i+1, nprime.findSuccessor(this, circle.getIdentifierAt(fingerTable.start(i+1))));
+      }
+    }
   }
 
   /**
@@ -135,8 +176,16 @@ public class ChordPeer extends AbstractChordPeer {
    * Defined in [1], Figure 6
    */
   private void updateOthers() {
-    /* TODO: Implementation required. */
-    throw new RuntimeException("This method has not been implemented!");
+    var circle = getNetwork().getIdentifierCircle();
+    // Do not use find predecessor, use find_successor instead
+    // See slides Self-Organisation p55
+
+    int m = getNetwork().getNbits();
+    for (int i = 1; i <= m; i++) {
+      var p = findPredecessor(this,
+              circle.getIdentifierAt(this.id().getIndex() - (int) Math.pow(2, (i-1))));
+      p.updateFingerTable(this, i);
+    }
   }
 
   /**
@@ -150,8 +199,12 @@ public class ChordPeer extends AbstractChordPeer {
   @Override
   public void updateFingerTable(ChordNode s, int i) {
     finger().node(i).ifPresent(node -> {
-      /* TODO: Implementation required. */
-      throw new RuntimeException("This method has not been implemented!");
+
+      if (s.id().getIndex() >= this.id().getIndex() && s.id().getIndex() < fingerTable.node(i).get().id().getIndex() ) {
+        fingerTable.setNode(i, s);
+        var p = predecessor();
+        p.updateFingerTable(s,i);
+      }
     });
   }
 
