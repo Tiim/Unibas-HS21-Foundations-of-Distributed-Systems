@@ -105,7 +105,7 @@ public class ChordPeer extends AbstractChordPeer {
       var succ = successor();
       var keys = succ.keys();
       for (var key : keys) {
-        if (Integer.parseInt(key) <= id().getIndex()) {
+        if (key.hashCode()<= id().getIndex()) {
           var value = succ.lookup(this, key);
           store(this, key, value.get());
           succ.delete(this, key);
@@ -221,7 +221,9 @@ public class ChordPeer extends AbstractChordPeer {
     if (this.status() == NodeStatus.OFFLINE || this.status() == NodeStatus.JOINING) return;
 
     /* TODO: Implementation required. Hint: Null check on predecessor! */
-    throw new RuntimeException("This method has not been implemented!");
+    if(this.predecessor()==null || CircularInterval.createOpen(this.predecessor().getIdentifier().getIndex(), this.getIdentifier().getIndex()).contains(nprime.getIdentifier().getIndex())){
+      this.setPredecessor(nprime);
+    }
 
   }
 
@@ -232,7 +234,14 @@ public class ChordPeer extends AbstractChordPeer {
    */
   @Override
   public void fixFingers() {
-    if (this.status() == NodeStatus.OFFLINE || this.status() == NodeStatus.JOINING) return;
+    if (this.status() == NodeStatus.OFFLINE || this.status() == NodeStatus.JOINING){
+
+      int m = this.getNetwork().getNbits();
+      int rand_i = new java.util.Random().nextInt();
+
+
+      return;
+    }
 
     /* TODO: Implementation required */
     throw new RuntimeException("This method has not been implemented!");
@@ -246,10 +255,17 @@ public class ChordPeer extends AbstractChordPeer {
    */
   @Override
   public void stabilize() {
-    if (this.status() == NodeStatus.OFFLINE || this.status() == NodeStatus.JOINING) return;
+    if (this.status() == NodeStatus.OFFLINE || this.status() == NodeStatus.JOINING){
+      ChordNode x = this.successor().predecessor();
+      if(CircularInterval.createOpen(this.getIdentifier().getIndex(), this.successor().getIdentifier().getIndex()).contains(x.getIdentifier().getIndex())){
+        fingerTable.setNode(1, x);
+
+      }
+      this.successor().notify(this);
+    }
 
     /* TODO: Implementation required.*/
-    throw new RuntimeException("This method has not been implemented!");
+  //  throw new RuntimeException("This method has not been implemented!");
   }
 
   /**
