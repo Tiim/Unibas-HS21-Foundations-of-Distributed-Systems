@@ -53,9 +53,11 @@ public class ChordPeer extends AbstractChordPeer {
   @Override
   public ChordNode findPredecessor(ChordNode caller, Identifier id) {
     ChordNode n = this;
-    System.out.println("while");
-    while (id.getIndex() > n.id().getIndex() && id.getIndex() < n.successor().id().getIndex()) {
+
+    var interval = CircularInterval.createLeftOpen(n.id(), n.successor().id());
+    while (!interval.contains(id)) {
       n = n.closestPrecedingFinger(caller, id);
+      interval = CircularInterval.createLeftOpen(n.id(), n.successor().id());
     }
 
     return n;
@@ -79,7 +81,8 @@ public class ChordPeer extends AbstractChordPeer {
         continue;
       }
       var fingerTableEntry = ft.get();
-      if ( fingerTableEntry.id().getIndex() < this.id().getIndex() && fingerTableEntry.id().getIndex() > id.getIndex() ) {
+      var interval = CircularInterval.createOpen(this.id(), id);
+      if ( interval.contains(fingerTableEntry.id()) ) {
         return fingerTableEntry;
       }
     }
@@ -99,13 +102,16 @@ public class ChordPeer extends AbstractChordPeer {
    */
   @Override
   public void joinAndUpdate(ChordNode nprime) {
+    var m = getNetwork().getNbits();
+    System.out.println(this + " joins the network using " + nprime);
     if (nprime != null) {
+
       initFingerTable(nprime);
       updateOthers();
       var succ = successor();
       var keys = succ.keys();
       for (var key : keys) {
-        if (key.hashCode()<= id().getIndex()) {
+        if (key.hashCode() % (2^m) <= id().getIndex()) {
           var value = succ.lookup(this, key);
           store(this, key, value.get());
           succ.delete(this, key);
@@ -115,10 +121,13 @@ public class ChordPeer extends AbstractChordPeer {
 
     } else {
       for (int i = 1; i <= getNetwork().getNbits(); i++) {
+        System.out.printf("Finger Table %s[%d] = %s%n", this, i, this);
         this.fingerTable.setNode(i, this);
       }
+      System.out.println("Predecessor of " + this + ": " + this);
       this.setPredecessor(this);
     }
+    System.out.println();
   }
 
   /**
@@ -150,22 +159,27 @@ public class ChordPeer extends AbstractChordPeer {
    * @param nprime Arbitrary {@link ChordNode} that is part of the network.
    */
   private void initFingerTable(ChordNode nprime) {
-    var circle = getNetwork().getIdentifierCircle();
-    var id = circle.getIdentifierAt(fingerTable.start(1));
-    fingerTable.setNode(1, nprime.findSuccessor(this,id));
 
-    setPredecessor(fingerTable.successor().predecessor());
-    fingerTable.successor().setPredecessor(this);
+    System.out.println("Initialize finger table of " + this);
+
+    var circle = getNetwork().getIdentifierCircle();
+    fingerTable.setNode(1, nprime.findSuccessor(this, circle.getIdentifierAt(fingerTable.start(1))));
+
+    System.out.println("Predecessor of " + this + ": " + successor().predecessor());
+    setPredecessor(successor().predecessor());
+    System.out.println("Predecessor of " + successor() + ": " + this);
+    successor().setPredecessor(this);
 
     var m = getNetwork().getNbits();
     for (int i = 1; i < m; i++) {
-      var fstart = fingerTable.start(i+1);
-      if (circle.getIdentifierAt(fstart).getIndex() >= this.id().getIndex() &&
-              circle.getIdentifierAt(fstart).getIndex() < fingerTable.node(i).get().id().getIndex()
-      ) {
-        fingerTable.setNode(i+1, fingerTable.node(i).get());
+      var fstart = fingerTable.start(i + 1);
+      var interval = CircularInterval.createRightOpen(this.id(), fingerTable.node(i).get().id());
+      if (interval.contains(circle.getIdentifierAt(fstart))) {
+        System.out.printf("Finger Table %s[%d] %s = %s    (initFingerTable)%n", this, i, getFingerTableRange(i) , fingerTable.node(i).get());
+        fingerTable.setNode(i + 1, fingerTable.node(i).get());
       } else {
-        fingerTable.setNode(i+1, nprime.findSuccessor(this, circle.getIdentifierAt(fingerTable.start(i+1))));
+        System.out.printf("Finger Table %s[%d] %s = %s    (initFingerTable)%n", this, i+1, getFingerTableRange(i+1) , nprime.findSuccessor(this, circle.getIdentifierAt(fingerTable.start(i + 1))));
+        fingerTable.setNode(i + 1, nprime.findSuccessor(this, circle.getIdentifierAt(fingerTable.start(i + 1))));
       }
     }
   }
@@ -176,14 +190,15 @@ public class ChordPeer extends AbstractChordPeer {
    * Defined in [1], Figure 6
    */
   private void updateOthers() {
+
+    System.out.println("Update other nodes than " + this);
     var circle = getNetwork().getIdentifierCircle();
-    // Do not use find predecessor, use find_successor instead
-    // See slides Self-Organisation p55
 
     int m = getNetwork().getNbits();
+    int n = this.id().getIndex();
     for (int i = 1; i <= m; i++) {
       var p = findPredecessor(this,
-              circle.getIdentifierAt(this.id().getIndex() - (int) Math.pow(2, (i-1))));
+              circle.getIdentifierAt(n - (int) Math.pow(2, (i-1))));
       p.updateFingerTable(this, i);
     }
   }
@@ -199,8 +214,10 @@ public class ChordPeer extends AbstractChordPeer {
   @Override
   public void updateFingerTable(ChordNode s, int i) {
     finger().node(i).ifPresent(node -> {
-
-      if (s.id().getIndex() >= this.id().getIndex() && s.id().getIndex() < fingerTable.node(i).get().id().getIndex() ) {
+      var interval = CircularInterval.createRightOpen(node.id(), this.id());
+      System.out.println(interval);
+      if (interval.contains(s.id())) {
+        System.out.printf("Finger Table %s[%d] %s = %s%n",this,i, getFingerTableRange(i),s );
         fingerTable.setNode(i, s);
         var p = predecessor();
         p.updateFingerTable(s,i);
@@ -265,7 +282,7 @@ public class ChordPeer extends AbstractChordPeer {
     }
 
     /* TODO: Implementation required.*/
-  //  throw new RuntimeException("This method has not been implemented!");
+    //  throw new RuntimeException("This method has not been implemented!");
   }
 
   /**
@@ -307,5 +324,12 @@ public class ChordPeer extends AbstractChordPeer {
   @Override
   public String toString() {
     return String.format("ChordPeer{id=%d}", this.id().getIndex());
+  }
+
+  public String getFingerTableRange(int i) {
+    var pow = (int) Math.pow(2, getNetwork().getNbits());
+    var start = (this.id().getIndex() + (int)Math.pow(2, i - 1)) % pow;
+    var end = (this.id().getIndex() +  (int)Math.pow(2, i)) % pow;
+    return String.format("[%s, %s)", start, end);
   }
 }
