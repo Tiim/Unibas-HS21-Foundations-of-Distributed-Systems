@@ -312,10 +312,13 @@ public class ChordPeer extends AbstractChordPeer {
   public void checkSuccessor() {
     if (this.status() == NodeStatus.OFFLINE || this.status() == NodeStatus.JOINING) return;
 
-    var succ = fingerTable.node(2).get();
+    var succ = fingerTable.node(2);
+    if (succ.isEmpty()) {
+      return;
+    }
     if(this.successor() != null && this.successor().status() == NodeStatus.OFFLINE) {
-      fingerTable.setNode(1, succ);
-      succ.notify(this);
+      fingerTable.setNode(1, succ.get());
+      succ.get().notify(this);
     }
   }
 
