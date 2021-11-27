@@ -112,6 +112,9 @@ public abstract class AbstractOracleXaBank {
 
 
     public Xid startTransaction( final Xid globalTransactionId ) throws XAException {
+        // PRESUMED ABORT 2PC: We somehow have to register a handler for the commit decision query. This handler will
+        // look at the commit record to determine if a commit has happened in case the coordinator (this program) did not commit
+        // in time ( e.g. after a crash). If the commit is not in the record we send the abort message back by default.
         final Xid xid = this.getXid(globalTransactionId);
         xaResource.start(xid, XAResource.TMNOFLAGS);
         return xid;
@@ -120,14 +123,20 @@ public abstract class AbstractOracleXaBank {
 
     public void endTransaction(final Xid transactionId, final boolean rollback) throws XAException {
 
+        // TRANSFER OF COORDINATION: give the current database the coordinator role.
+        // there is no need to end transaction for each involved database, as the current database will
+        // recursively forward the coordinator role to them as well. We will receive the commit message from
+        // the database here and therefore know the transaction was committed by all databases.
         xaResource.end(transactionId, XAResource.TMSUCCESS);
 
-        // prep is either XA_OK or XA_RDONLY, otherwise this method throws. ==> we dont need to check the return value.
+        // prep is either XA_OK or XA_RDONLY, otherwise this method throws. ==> we don't need to check the return value.
         int prep = xaResource.prepare(transactionId);
 
         if (rollback) {
             xaResource.rollback(transactionId);
         } else {
+
+            // PRESUMED ABORT 2PC: Store the commit record.
             xaResource.commit(transactionId, false);
         }
     }
