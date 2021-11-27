@@ -107,23 +107,29 @@ public abstract class AbstractOracleXaBank {
 
     public Xid startTransaction() throws XAException {
         final Xid xid = this.getXid();
-
-        // TODO: your turn ;-)
-        throw new UnsupportedOperationException( "Implement me :-)" );
+        return startTransaction(xid);
     }
 
 
     public Xid startTransaction( final Xid globalTransactionId ) throws XAException {
-        final Xid xid = this.getXid( globalTransactionId );
-
-        // TODO: your turn ;-)
-        throw new UnsupportedOperationException( "Implement me :-)" );
+        final Xid xid = this.getXid(globalTransactionId);
+        xaResource.start(xid, XAResource.TMNOFLAGS);
+        return xid;
     }
 
 
-    public void endTransaction( final Xid transactionId, final boolean rollback ) throws XAException {
-        // TODO: your turn ;-)
-        throw new UnsupportedOperationException( "Implement me :-)" );
+    public void endTransaction(final Xid transactionId, final boolean rollback) throws XAException {
+
+        xaResource.end(transactionId, XAResource.TMSUCCESS);
+
+        // prep is either XA_OK or XA_RDONLY, otherwise this method throws. ==> we dont need to check the return value.
+        int prep = xaResource.prepare(transactionId);
+
+        if (rollback) {
+            xaResource.rollback(transactionId);
+        } else {
+            xaResource.commit(transactionId, false);
+        }
     }
 
 

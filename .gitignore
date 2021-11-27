@@ -1,3 +1,5 @@
 .vagrant/
 *.log
 .vscode/
+build/
+.gradle/

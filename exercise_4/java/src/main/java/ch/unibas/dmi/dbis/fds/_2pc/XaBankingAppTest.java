@@ -8,6 +8,7 @@ import org.junit.platform.launcher.core.LauncherFactory;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 import org.junit.platform.launcher.listeners.TestExecutionSummary;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,8 +16,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.platform.engine.discovery.DiscoverySelectors.selectClass;
 
 /**
@@ -29,8 +29,8 @@ public class XaBankingAppTest {
     private static final Logger LOG = Logger.getLogger( XaBankingAppTest.class.getName() );
 
     /** TODO 1 of 2: Change login credentials to the ones you received via mail. */
-    private static final String DBMS_USERNAME = "test";
-    private static final String DBMS_PASSWORD = "test";
+    private static final String DBMS_USERNAME = "fdis_1";
+    private static final String DBMS_PASSWORD = "AUUjFGQ";
 
 
     static {
@@ -55,13 +55,15 @@ public class XaBankingAppTest {
         List<TestExecutionSummary.Failure> failures = summary.getFailures();
         System.out.println("getTestsSucceededCount() - " + summary.getTestsSucceededCount());
         failures.forEach(failure -> System.out.println("failure - " + failure.getException()));
+
+        failures.forEach(f -> f.getException().printStackTrace());
     }
 
 
     private enum Bank {
         /** TODO 2 of 2: Adapt connection details according to exercise sheet. */
-        BANK_X( "p5", "jdbc:oracle:thin:@dmi-p5.dmi.unibas.ch:1521:xe", DBMS_USERNAME, DBMS_PASSWORD ),
-        BANK_Y( "p6", "jdbc:oracle:thin:@dmi-p6.dmi.unibas.ch:1521:xe", DBMS_USERNAME, DBMS_PASSWORD );
+        BANK_X( "p5", "jdbc:oracle:thin:@p5.dmi.unibas.ch:1521:xe", DBMS_USERNAME, DBMS_PASSWORD ),
+        BANK_Y( "p6", "jdbc:oracle:thin:@p6.dmi.unibas.ch:1521:xe", DBMS_USERNAME, DBMS_PASSWORD );
 
         public final transient AbstractOracleXaBank bank;
 
@@ -148,6 +150,74 @@ public class XaBankingAppTest {
 
         //
         printTestDescription( "Transfer", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
+        printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+        printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+        try {
+            System.out.println( "-- executing transfer --" );
+            FROM_BANK.transfer( TO_BANK, ibanFrom, ibanTo, transferValue );
+        } finally {
+            printBalance( false, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+            printBalance( false, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+            assertEquals( expectedBalanceFrom, FROM_BANK.getBalance( ibanFrom ), Float.MIN_VALUE );
+            assertEquals( expectedBalanceTo, TO_BANK.getBalance( ibanTo ), Float.MIN_VALUE );
+        }
+    }
+
+    @Test
+    public void transferWrongIban() throws SQLException {
+        final String ibanFrom = "CH5367B1", bicFrom = Bank.BANK_X.name();
+        final AbstractOracleXaBank FROM_BANK = Bank.valueOf( bicFrom ).bank;
+
+        // note: this iban does not exist!
+        final String ibanTo = "CH5367B6", bicTo = Bank.BANK_Y.name();
+        final AbstractOracleXaBank TO_BANK = Bank.BANK_Y.bank;
+
+        final float transferValue = 100.5f;
+
+        // Expect nothing to change
+        final float expectedBalanceFrom = FROM_BANK.getBalance( ibanFrom );
+        final float expectedBalanceTo = TO_BANK.getBalance( ibanTo );
+
+        assertFalse( Float.isNaN( expectedBalanceFrom ) );
+        assertTrue( Float.isNaN( expectedBalanceTo ) );
+
+        printTestDescription( "Transfer with wrong IBAN", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
+        printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+        printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+        try {
+            System.out.println( "-- executing transfer --" );
+            FROM_BANK.transfer( TO_BANK, ibanFrom, ibanTo, transferValue );
+        } finally {
+            printBalance( false, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+            printBalance( false, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+            assertEquals( expectedBalanceFrom, FROM_BANK.getBalance( ibanFrom ), Float.MIN_VALUE );
+            assertEquals( expectedBalanceTo, TO_BANK.getBalance( ibanTo ), Float.MIN_VALUE );
+        }
+    }
+
+    @Test
+    public void transferNotEnoughMoney() throws SQLException {
+        final String ibanFrom = "CH5367B4", bicFrom = Bank.BANK_X.name();
+        final AbstractOracleXaBank FROM_BANK = Bank.valueOf( bicFrom ).bank;
+
+        final String ibanTo = "CH5367B1", bicTo = Bank.BANK_Y.name();
+        final AbstractOracleXaBank TO_BANK = Bank.BANK_Y.bank;
+
+        // note: more money than available in bank account.
+        final float transferValue = 1800f;
+
+        // Expect nothing to change
+        final float expectedBalanceFrom = FROM_BANK.getBalance( ibanFrom );
+        final float expectedBalanceTo = TO_BANK.getBalance( ibanTo );
+
+        assertFalse( Float.isNaN( expectedBalanceFrom ) );
+        assertFalse( Float.isNaN( expectedBalanceTo ) );
+
+        printTestDescription( "Transfer with not enough money", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
         printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
         printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
 
