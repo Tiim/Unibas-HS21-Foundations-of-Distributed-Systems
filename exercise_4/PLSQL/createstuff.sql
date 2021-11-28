@@ -1,14 +1,24 @@
-
--- Create Database Link manually
-
-CREATE DATABASE LINK "LinkNameX"
-   CONNECT TO "Username" IDENTIFIED BY "password"
+-- Create Database Link P5
+CREATE DATABASE LINK "P5Link"
+   CONNECT TO "FDIS_22" IDENTIFIED BY "enNB2hy"
    USING '(DESCRIPTION =
        (ADDRESS_LIST =
-         (ADDRESS = (PROTOCOL = TCP)(HOST = xxx.dmi.unibas.ch)(PORT = 1521))
+         (ADDRESS = (PROTOCOL = TCP)(HOST = p5.dmi.unibas.ch)(PORT = 1521))
        )
        (CONNECT_DATA =
-         (SID = xxxOracle_SID_here_xxx)
+         (SID = xe)
+       )
+     )';
+
+-- Create Database Link P6
+CREATE DATABASE LINK "P6Link"
+   CONNECT TO "FDIS_22" IDENTIFIED BY "enNB2hy"
+   USING '(DESCRIPTION =
+       (ADDRESS_LIST =
+         (ADDRESS = (PROTOCOL = TCP)(HOST = p6.dmi.unibas.ch)(PORT = 1521))
+       )
+       (CONNECT_DATA =
+         (SID = xe)
        )
      )';
 

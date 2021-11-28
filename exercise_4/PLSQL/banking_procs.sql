@@ -38,8 +38,7 @@ create or replace PACKAGE BODY BANKING_PROCS AS
 
     END createBankLink;
 
---removes value from iban in bic
-  PROCEDURE withdraw(
+PROCEDURE withdraw(
     p_value NUMBER,
     p_iban  VARCHAR2,
     p_bic   VARCHAR2) IS
@@ -47,40 +46,61 @@ create or replace PACKAGE BODY BANKING_PROCS AS
       unknown_account EXCEPTION;
       not_local_bic EXCEPTION;
       no_enough_credit EXCEPTION;
-      BANK_NAME VARCHAR2(50);
-      CUST_NUM VARCHAR2(50);
+      BANK_NAMES_COUNT NUMBER;
+      CUST_NUM_COUNT NUMBER;
       CREDIT NUMBER;
+      bic_count NUMBER;
+      negative_input Exception;
     BEGIN
     
-        SELECT NAME INTO BANK_NAME FROM BANK_CONFIG WHERE BIC = p_bic;
-        IF BANK_NAME IS NULL THEN
-            RAISE not_local_bic;
-        END IF;
+        if p_bic != 'P5' then
+            raise not_local_bic;
+            rollback;
+        end if;
+--    check bic availability
         
-        SELECT CUSTOMERNO, BALANCE INTO CUST_NUM, CREDIT FROM ACCOUNT WHERE IBAN = p_iban;
-        IF CUST_NUM IS NULL THEN
+        select count(BIC) INTO bic_count FROM BANK_CONFIG;
+        if bic_count>0 THEN
+            SELECT count(NAME) INTO BANK_NAMES_COUNT FROM BANK_CONFIG WHERE BIC = p_bic; --IN CASE OF BIC FOUND RETRIEVE COUNTS
+            IF BANK_NAMES_COUNT = 0 THEN
+                RAISE not_local_bic;
+                ROLLBACK;
+            END IF;
+        END IF;
+--        check iban in local database p5
+        SELECT count(CUSTOMERNO) INTO CUST_NUM_COUNT FROM ACCOUNT WHERE IBAN = p_iban;
+        IF (CUST_NUM_COUNT = 0) then
             RAISE unknown_account;
             ROLLBACK;
         END IF;
         
+--        check input value is not negative
+        if p_value < 0 then
+            raise negative_input;
+        end if;
+        
+--        check credit limit
+        SELECT BALANCE INTO CREDIT FROM ACCOUNT WHERE IBAN like p_iban;
+
         IF (CREDIT < p_value) THEN
             RAISE no_enough_credit;
             ROLLBACK;
         ELSE
+--          withdraw the account using update statement
             UPDATE ACCOUNT SET BALANCE = CREDIT - p_value WHERE IBAN = p_iban;
             COMMIT;
         END IF;
         
         EXCEPTION
-            WHEN not_local_bic THEN RAISE_APPLICATION_ERROR(-20001, 'Error in withdraw. BIC Not Local');
-            WHEN unknown_account THEN RAISE_APPLICATION_ERROR(-20002, 'Error in withdraw. Unknown account');
-            WHEN no_enough_credit THEN RETURN;
+            WHEN not_local_bic THEN RAISE_APPLICATION_ERROR(-20012, 'Error in withdraw. BIC not local');
+            WHEN unknown_account THEN RAISE_APPLICATION_ERROR(-20013, 'Error in withdraw. Unknown account');
+            WHEN no_enough_credit THEN RAISE_APPLICATION_ERROR(-20014, 'Error in withdraw. No enough credit');
+            WHEN negative_input THEN RAISE_APPLICATION_ERROR(-20015, 'Error in withdraw. Negative input value');
             WHEN OTHERS THEN ROLLBACK;
-      -- TODO put your PL/SQL Code here to withdraw money from the local bank
-      dbms_output.put_line('not ready yet :-(');
+
+    end withdraw;
 
 
-    END withdraw;
 
   PROCEDURE deposit(
     p_value NUMBER,
@@ -90,52 +110,69 @@ create or replace PACKAGE BODY BANKING_PROCS AS
     unknown_account EXCEPTION;
       not_local_bic EXCEPTION;
       no_enough_credit EXCEPTION;
-      BANK_NAME VARCHAR2(50);
-      CUST_NUM VARCHAR2(50);
+      BANK_NAMES NUMBER;
+      CUST_NUM NUMBER;
       CREDIT NUMBER;
+      bic_count NUMBER;
+      negative_input exception;
     BEGIN
+--        check input value is not negative    
+        if p_value <0 then
+            raise negative_input;
+        end if;
+--        check whether use local or remote dbs
         IF (p_bic = 'P5') THEN
-            
-            SELECT NAME INTO BANK_NAME FROM BANK_CONFIG WHERE BIC = p_bic;
-            IF BANK_NAME IS NULL THEN
+--    check bic availability        
+            select count(BIC) INTO bic_count FROM BANK_CONFIG;
+            if bic_count>0 THEN
+            SELECT count(NAME) INTO BANK_NAMES FROM BANK_CONFIG WHERE BIC = p_bic;
+            IF BANK_NAMES = 0 THEN
                 RAISE not_local_bic;
+                ROLLBACK;
+                END IF;
             END IF;
-            
-            SELECT CUSTOMERNO, BALANCE INTO CUST_NUM, CREDIT FROM ACCOUNT WHERE IBAN = p_iban;
-            IF CUST_NUM IS NULL THEN
+--        check iban existence
+            SELECT count(CUSTOMERNO) INTO CUST_NUM FROM ACCOUNT WHERE IBAN like p_iban;
+            IF (CUST_NUM = 0) then
                 RAISE unknown_account;
+                ROLLBACK;
             END IF;
             
-            
+            SELECT BALANCE INTO CREDIT FROM ACCOUNT WHERE IBAN like p_iban;
+
             UPDATE ACCOUNT SET BALANCE = CREDIT + p_value WHERE IBAN = p_iban;
             COMMIT; --after insert or update
         
         elsIF (p_bic = 'P6') THEN
-            SELECT NAME INTO BANK_NAME FROM BANK_CONFIG@P6Link WHERE BIC = p_bic;
-            IF BANK_NAME IS NULL THEN
+            select count(BIC) INTO bic_count FROM BANK_CONFIG@P6Link;
+            if bic_count>0 THEN
+            SELECT count(NAME) INTO BANK_NAMES FROM BANK_CONFIG@P6Link WHERE BIC = p_bic;
+            IF BANK_NAMES = 0 THEN
                 RAISE not_local_bic;
+                ROLLBACK;
+                END IF;
             END IF;
-            
-            SELECT CUSTOMERNO, BALANCE INTO CUST_NUM, CREDIT FROM ACCOUNT@P6Link WHERE IBAN = p_iban;
-            IF CUST_NUM IS NULL THEN
+
+            SELECT count(CUSTOMERNO) INTO CUST_NUM FROM ACCOUNT@P6Link WHERE IBAN like p_iban;
+            IF (CUST_NUM = 0) then
                 RAISE unknown_account;
+                ROLLBACK;
             END IF;
             
-            
+            SELECT BALANCE INTO CREDIT FROM ACCOUNT WHERE IBAN like p_iban;
             UPDATE ACCOUNT@P6Link SET BALANCE = CREDIT + p_value WHERE IBAN = p_iban;
-            COMMIT; --after insert or update
+            COMMIT;
+        else 
+            raise not_local_bic;
+            rollback;
         END IF;    
         
         EXCEPTION
-            WHEN not_local_bic THEN dbms_output.put_line('This bank is invalid');
-            WHEN unknown_account THEN RETURN;
-            WHEN no_enough_credit THEN RETURN;
+            WHEN not_local_bic THEN RAISE_APPLICATION_ERROR(-20012, 'Error in deposit. BIC not local');
+            WHEN unknown_account THEN RAISE_APPLICATION_ERROR(-20013, 'Error in deposit. Unknown account');
+            WHEN no_enough_credit THEN RAISE_APPLICATION_ERROR(-20014, 'Error in deposit. No enough credit');
+            WHEN negative_input THEN RAISE_APPLICATION_ERROR(-20014, 'Error in deposit. Negative input value');
             WHEN OTHERS THEN ROLLBACK;
-       
-
-      -- TODO put your PL/SQL Code here to deposit money on the local bank
-      dbms_output.put_line('not ready yet :-(');
-
     END deposit;
 
 
@@ -146,25 +183,61 @@ create or replace PACKAGE BODY BANKING_PROCS AS
     to_iban   VARCHAR2,
     to_bic    VARCHAR2
   ) IS
-    bank_not_exist EXCEPTION;
-    account_not_exist EXCEPTION;
-    credit_not_enough EXCEPTION;
+    
+    Account1_count Number;
+    Account2_count Number;
+    CREDIT NUMBER;
+    negative_input Exception;
+    not_local_bic Exception;
+    unknown_account EXCEPTION;
+    no_enough_credit EXCEPTION;
     BEGIN
+      -- check if negative value
+        if p_value < 0 then
+            raise negative_input;
+        end if;
+        
+        if from_bic != 'P5' then
+            raise not_local_bic;
+            rollback;
+        end if;
+        
+        if to_bic != 'P5' or to_bic !='P6' then
+            raise not_local_bic;
+            rollback;
+        end if;
+       -- check existence of the from iban 
+        SELECT count(CUSTOMERNO) INTO Account1_count FROM ACCOUNT WHERE IBAN like from_iban;
+            IF (Account1_count = 0) then
+                RAISE unknown_account;
+                ROLLBACK;
+            END IF;
+       -- check existence of the to iban 
+        SELECT count(CUSTOMERNO) INTO Account2_count FROM ACCOUNT WHERE IBAN like to_iban;
+            IF (Account2_count = 0) then
+                SELECT count(CUSTOMERNO) INTO Account2_count FROM ACCOUNT@P6Link WHERE IBAN like to_iban;
+                IF (Account2_count = 0) then
+                    RAISE unknown_account;
+                    ROLLBACK;
+                END IF;
+            END IF;
+
+    -- check balance availability
+        SELECT BALANCE INTO CREDIT FROM ACCOUNT WHERE IBAN like from_iban;
+        IF (CREDIT < p_value) THEN
+            RAISE no_enough_credit;
+            ROLLBACK;
+        END IF;
        
---        createBankLink(to_bic, 'remote_bank', 'remote_bank_link', 'fdis_22', 'enNB2hy', 'p6.dmi.unibas.ch');    
         withdraw(p_value, from_iban, from_bic);        
         deposit(p_value, to_iban, to_bic);
---        deposit@p6.dmi.unibas.ch(p_value, to_iban, to_bic);
         EXCEPTION
-            WHEN bank_not_exist THEN RETURN;
-            WHEN account_not_exist THEN RETURN;
-            WHEN credit_not_enough THEN RETURN;
+            WHEN not_local_bic THEN RAISE_APPLICATION_ERROR(-20012, 'Error in transfer. BIC not local');
+            WHEN unknown_account THEN RAISE_APPLICATION_ERROR(-20013, 'Error in transfer. Unknown account');
+            WHEN no_enough_credit THEN RAISE_APPLICATION_ERROR(-20014, 'Error in transfer. No enough credit');
+            WHEN negative_input THEN RAISE_APPLICATION_ERROR(-20015, 'Error in transfer. Negative input value');
             WHEN OTHERS THEN ROLLBACK;
-      -- TODO put your PL/SQL Code here to transfer money from the local bank to an remote bank.
-      -- Attention: use the previously defined deposit and withdraw PL/SQL procedures again here.
-      -- You can also use PL/SQL procedures via the database link at the remote bank.
-      dbms_output.put_line('not ready yet :-(');
-
+   
     END transfer;
 
 END BANKING_PROCS;
