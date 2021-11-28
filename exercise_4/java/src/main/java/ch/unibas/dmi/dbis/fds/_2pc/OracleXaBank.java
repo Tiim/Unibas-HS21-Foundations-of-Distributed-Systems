@@ -51,11 +51,12 @@ public class OracleXaBank extends AbstractOracleXaBank {
         }
 
         try {
+            Connection curCon = getXaConnection().getConnection();
+            Connection toCon = TO_BANK.getXaConnection().getConnection();
+
             curXid = startTransaction();
             toXid = TO_BANK.startTransaction();
 
-            Connection curCon = getXaConnection().getConnection();
-            Connection toCon = TO_BANK.getXaConnection().getConnection();
 
             // not needed because of database constraint.
             // somehow causes the connection to close?

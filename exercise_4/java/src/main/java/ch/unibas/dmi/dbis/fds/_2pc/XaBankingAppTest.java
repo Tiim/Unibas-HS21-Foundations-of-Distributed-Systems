@@ -166,6 +166,39 @@ public class XaBankingAppTest {
     }
 
     @Test
+    public void transferNegative() throws SQLException {
+        final String ibanFrom = "CH5367B1", bicFrom = Bank.BANK_X.name();
+        final AbstractOracleXaBank FROM_BANK = Bank.valueOf( bicFrom ).bank;
+
+        final String ibanTo = "CH5367B1", bicTo = Bank.BANK_Y.name();
+        final AbstractOracleXaBank TO_BANK = Bank.BANK_Y.bank;
+
+        final float transferValue = -100.5f;
+
+        final float expectedBalanceFrom = FROM_BANK.getBalance( ibanFrom );
+        final float expectedBalanceTo = TO_BANK.getBalance( ibanTo );
+
+        assertFalse( Float.isNaN( expectedBalanceFrom ) );
+        assertFalse( Float.isNaN( expectedBalanceTo ) );
+
+        //
+        printTestDescription( "Transfer negative money", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
+        printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+        printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+        try {
+            System.out.println( "-- executing transfer --" );
+            FROM_BANK.transfer( TO_BANK, ibanFrom, ibanTo, transferValue );
+        } finally {
+            printBalance( false, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+            printBalance( false, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+            assertEquals( expectedBalanceFrom, FROM_BANK.getBalance( ibanFrom ), Float.MIN_VALUE );
+            assertEquals( expectedBalanceTo, TO_BANK.getBalance( ibanTo ), Float.MIN_VALUE );
+        }
+    }
+
+    @Test
     public void transferWrongIban() throws SQLException {
         final String ibanFrom = "CH5367B1", bicFrom = Bank.BANK_X.name();
         final AbstractOracleXaBank FROM_BANK = Bank.valueOf( bicFrom ).bank;
@@ -183,7 +216,41 @@ public class XaBankingAppTest {
         assertFalse( Float.isNaN( expectedBalanceFrom ) );
         assertTrue( Float.isNaN( expectedBalanceTo ) );
 
-        printTestDescription( "Transfer with wrong IBAN", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
+        printTestDescription( "Transfer to wrong IBAN", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
+        printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+        printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+        try {
+            System.out.println( "-- executing transfer --" );
+            FROM_BANK.transfer( TO_BANK, ibanFrom, ibanTo, transferValue );
+        } finally {
+            printBalance( false, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+            printBalance( false, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+            assertEquals( expectedBalanceFrom, FROM_BANK.getBalance( ibanFrom ), Float.MIN_VALUE );
+            assertEquals( expectedBalanceTo, TO_BANK.getBalance( ibanTo ), Float.MIN_VALUE );
+        }
+    }
+
+    @Test
+    public void transferFromWrongIban() throws SQLException {
+        // note: this iban does not exist!
+        final String ibanFrom = "CH5367B6", bicFrom = Bank.BANK_X.name();
+        final AbstractOracleXaBank FROM_BANK = Bank.valueOf( bicFrom ).bank;
+
+        final String ibanTo = "CH5367B1", bicTo = Bank.BANK_Y.name();
+        final AbstractOracleXaBank TO_BANK = Bank.BANK_Y.bank;
+
+        final float transferValue = 100.5f;
+
+        // Expect nothing to change
+        final float expectedBalanceFrom = FROM_BANK.getBalance( ibanFrom );
+        final float expectedBalanceTo = TO_BANK.getBalance( ibanTo );
+
+        assertTrue( Float.isNaN( expectedBalanceFrom ) );
+        assertFalse( Float.isNaN( expectedBalanceTo ) );
+
+        printTestDescription( "Transfer from wrong IBAN", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
         printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
         printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
 
@@ -232,4 +299,43 @@ public class XaBankingAppTest {
             assertEquals( expectedBalanceTo, TO_BANK.getBalance( ibanTo ), Float.MIN_VALUE );
         }
     }
+
+    /*
+     * This doesn't work because we share the same connection for both databases and therefore the
+     * transactions get mixed up (?).
+     */
+    @Test
+    public void transferSameBank() throws SQLException {
+        final String ibanFrom = "CH5367B4", bicFrom = Bank.BANK_X.name();
+        final AbstractOracleXaBank FROM_BANK = Bank.valueOf( bicFrom ).bank;
+
+        final String ibanTo = "CH5367B5", bicTo = Bank.BANK_X.name();
+        final AbstractOracleXaBank TO_BANK = Bank.BANK_X.bank;
+
+        // note: more money than available in bank account.
+        final float transferValue = 1800f;
+
+        // Expect nothing to change
+        final float expectedBalanceFrom = FROM_BANK.getBalance( ibanFrom );
+        final float expectedBalanceTo = TO_BANK.getBalance( ibanTo );
+
+        assertFalse( Float.isNaN( expectedBalanceFrom ) );
+        assertFalse( Float.isNaN( expectedBalanceTo ) );
+
+        printTestDescription( "Transfer to same bank", ibanFrom, bicFrom, ibanTo, bicTo, transferValue );
+        printBalance( true, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+        printBalance( true, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+        try {
+            System.out.println( "-- executing transfer --" );
+            FROM_BANK.transfer( TO_BANK, ibanFrom, ibanTo, transferValue );
+        } finally {
+            printBalance( false, ibanFrom, bicFrom, FROM_BANK.getBalance( ibanFrom ) );
+            printBalance( false, ibanTo, bicTo, TO_BANK.getBalance( ibanTo ) );
+
+            assertEquals( expectedBalanceFrom, FROM_BANK.getBalance( ibanFrom ), Float.MIN_VALUE );
+            assertEquals( expectedBalanceTo, TO_BANK.getBalance( ibanTo ), Float.MIN_VALUE );
+        }
+    }
+
 }
