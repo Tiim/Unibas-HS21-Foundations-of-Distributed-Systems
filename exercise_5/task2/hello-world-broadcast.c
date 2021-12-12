@@ -14,6 +14,8 @@ void send_chars(int rank, int tasks) {
         strcpy(buffer, "hello world");
     }
     MPI_Bcast(buffer, 50, MPI_CHAR, 0, MPI_COMM_WORLD);
+    
+    // send message to everyone, forward if its our turn    
     for (int i = 1; i < tasks; i++) {
         MPI_Bcast(buffer, 50, MPI_CHAR, i, MPI_COMM_WORLD);
         if (i == tasks - 1 && rank == tasks - 1) {
