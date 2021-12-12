@@ -25,7 +25,7 @@
 #include "mpi.h"
 
 #define TRUE 1
-#define DEBUG
+//#define DEBUG
 #define MAX_CONTRIB 200
 
 int global_sum(int my_contrib, int my_rank, int p, MPI_Comm comm);
@@ -49,7 +49,9 @@ int main(int argc, char *argv[]) {
     total = global_sum(x, my_rank, p, comm);
     
     //PRINT RESULT
-    printf("SUM: %d", total);
+    if (my_rank == 0) {
+        printf("SUM: %d\n\n", total);
+    }
     fflush(stdout);
     
     MPI_Finalize();
@@ -125,15 +127,15 @@ int global_sum(int my_contrib, int my_rank, int p, MPI_Comm comm) {
 
         if (partner < my_rank) {
             // send to partner
-            printf("Proc %d > sending to %d\n", my_rank, partner);
+            //printf("Proc %d > sending to %d\n", my_rank, partner);
             MPI_Send(&sum, 1, MPI_INT, partner, 0, MPI_COMM_WORLD);
-            printf("Proc %d > sent! to %d\n", my_rank, partner);
+            //printf("Proc %d > sent! to %d\n", my_rank, partner);
             break;
         } else {
             // recv from partner
-            printf("Proc %d > receiving from %d\n", my_rank, partner);
+            //printf("Proc %d > receiving from %d\n", my_rank, partner);
             MPI_Recv(&temp, 1, MPI_INT, partner, 0, MPI_COMM_WORLD, &stat);
-            printf("Proc %d > received! from %d\n", my_rank, partner);
+            //printf("Proc %d > received! from %d\n", my_rank, partner);
             sum += temp;
         }
 
