@@ -1,0 +1,79 @@
+Week 2 -04 Optimal alignments:
+
+Page 30
+-Score = ratio of probablities
+(relative likelihood the two seq. are evolutionary related as opposed to being unrelated) -> when 2 seq. have a common ancestor then we would expect that the similarity of these 2 sequences is high 
+whereas law mafeesh similarity awi yeb2o unrelated
+
+-Random model: "assuming the true model of explaining the origin of the two sequences"
+
+-Joint probablity + all events are independent -> joint probability will be the product of the marginal probability
+
+eqn: for every position i in the sequence we observe a certain letter, the letter occurs with the frequency q_xi and we multiply all these individual frequencies to estimate the probability -> first product reflect the assumption that every position is treated independently from other positions
+same goes for q_yi
+
+then the assumption that under the random model of both x and y all independent fe ba3do
+therefore 1 big product of marginal probabilities.
+
+
+
+Page 31
+-in random model we have fully factorised distribution 
+in the "match model" we have one type of independence assumption remaining which is the independence with regard to the positions, so 'i' again is the index defining the position in a sequence
+no two separate probabilities just one joint probability
+
+the joint probability of x and y under the match model eqn (1st eqn)
+
+
+
+- 2nd eqn is odds ratio (if u take the ratio of both)
+
+
+keda it is a multiplicative scoring scheme fa neroo7 lel additive scoring scheme by taking the log of 2nd eqn to give us 3rd eqn (sum of logarithms)
+
+s(a,b) are then the values arranged in the substitution matrix, and the size of the substitution matrix will depend on the alphabet
+
+
+ Page 32 
+
+mesh fahma el scores fel substitution matrix awi minute 13/14 bas elly fehemto: 
+-elements have negative scores then random model dominates
+-elements that have positive scores then match model dominates
+
+position independent subs matrix that just score the occurunce of certain pair of letters in 2 different sequences 
+
+
+Page 33
+
+-gap penality functions
+
+-linear do not work so well in practice because translation and transcription of mrna beyeb2a 3andohom fel 3ady gaps aktar fal penalty keda 3aly awi? (min 17)
+linear time complexity
+
+-affine function
+scoring longer gaps not with a linear function 
+2 parameters wa7ed for starting the gap wel tany for extending the gap
+
+- convex
+most appropriate model where each additional space contributes less than the previous space
+- bas 3ando moshkela  in terms of computational complexity
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+Week 2 -05 Global alignments:
+
+Page 34
+
+-empty sequence is empty prefix: a sequence without any symbols
+- F(i,j) is defined recursively under these specifying base conditions 
+
+F(i,0)  we align the first i letters in the sequence x with 0 letters in sequence y  because  y is an empty sequence,
+ so any letter in the first sequence will get aligned to a gap in the second sequence,
+so we sum up the gap penalties we d is the gap length?
+F(0,j) is prefix of sequence 'y' up to position 'j'
+
+the optimal score for aligning 2 sequences  

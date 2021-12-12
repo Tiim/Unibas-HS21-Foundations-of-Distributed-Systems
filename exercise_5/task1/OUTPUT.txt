@@ -1,0 +1,4 @@
+srun: error: Invalid user id 80930: No error
+srun: Warning: Unable to assume uid=80930
+sines; 100000000; 20; 0.071388
+sines; 100000000; 20; 0.082099

@@ -1,0 +1,32 @@
+srun: error: Invalid user id 80930: No error
+srun: Warning: Unable to assume uid=80930
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
+sum: 55
