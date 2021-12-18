@@ -1,0 +1,34 @@
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 1.144566
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 1.234465
+
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 1.244051
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 1.122513
+
