@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH -J my_job
+#SBATCH --time=00:05:00
+#SBATCH --exclusive
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=2
+#SBATCH --cpus-per-task=1
+#SBATCH --partition=xeon
+#SBATCH --output=output.txt
+#SBATCH --hint=nomultithread
+
+srun hostname
