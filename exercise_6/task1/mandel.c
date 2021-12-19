@@ -216,6 +216,9 @@ int main (int argc, char *argv[]) {
 
 
     free(data_msg);
+    if (my_rank == 0) {
+      free(full_buffer);
+    }
    
   
     return 0;
