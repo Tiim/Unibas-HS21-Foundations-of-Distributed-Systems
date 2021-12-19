@@ -1,0 +1,50 @@
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 1
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.859394
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 1
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.859056
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 1
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.859410
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 1
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.859957
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 1
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.859616
+

@@ -1,0 +1,330 @@
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.371279
+
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.648224
+
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.634698
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.608600
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.618029
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.663478
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.663881
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.691963
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.367123
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.617239
+
+
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.636202
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.623445
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.645665
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.634931
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.646451
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.675224
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.339603
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.639585
+
+
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.639817
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.635158
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.636541
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.638998
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.641901
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.672493
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.370079
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.621533
+
+
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.627521
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.613687
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.632716
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.626641
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.633530
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.663432
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.335120
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.606607
+
+
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.642475
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.606724
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.632980
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.641636
+
+
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.644048
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 8
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 0.673763
+

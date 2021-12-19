@@ -42,7 +42,6 @@
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <mpi.h>
 
 #include <time.h>
 
@@ -92,7 +91,7 @@ int main (int argc, char *argv[]) {
     double imag_max = N;
     long *data_msg;
     
-    FILE *fp = NULL;
+    FILE *fp;
     double scale_real, scale_imag, scale_color;
     double Tpar, tpar1, tpar2;
     double size  = 2;
@@ -106,12 +105,6 @@ int main (int argc, char *argv[]) {
     int start,end;
     struct timespec t1, t2, dt;
 
-    int my_rank;
-
-    //INITIALIZE MPI
-    MPI_Init(&argc, &argv);
-    MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
    
     /* Process command-line arguments */
     if(argc<2)
@@ -151,6 +144,11 @@ int main (int argc, char *argv[]) {
    width = height = NPIXELS;
  
    
+  
+  // allocate data
+  data_msg = malloc(width*width * sizeof(long));
+ 
+
   /* Compute factors to scale computational region to window */
     scale_real = (double) (real_max - real_min) / (double) width;
     scale_imag = (double) (imag_max - imag_min) / (double) width;
@@ -161,41 +159,20 @@ int main (int argc, char *argv[]) {
   get_clockres(&t1);
 
 
- if (my_rank == 0) {
-    // open data file
-    fp = fopen( "mandel_data.csv", "w" );
- }
+ 
+  // open data file
+  fp = fopen( "mandel_data.csv", "w" );
+ 
 
-//   start = 0;
-//   end = width*width;
-
-
-// from exercise 6 task 2 reduce.c
-//  int slice_start = (2000/p) * my_rank;
-//  int slice_end = (2000/p) * (my_rank + 1);
-
-   start = (width * width / nprocs) * my_rank;
-   end = (width * width / nprocs) * (my_rank + 1);
-
-   //if (my_rank == nprocs -1) {
-   //  end = (width * width);
-   //}
-
-  long* full_buffer;
-
-  if (my_rank == 0) {
-    full_buffer = malloc(width*width * sizeof(long));
-  }
-  // allocate data
-  data_msg = malloc((end - start) * sizeof(long));
+   start = 0;
+   end = width*width;   
 
    get_time(&t1);
 
    calculate_pixel(width,maxiter,data_msg, real_min, real_max,imag_min, imag_max, scale_real,scale_imag,scale_color, start, end);
-   
-   MPI_Gather(data_msg, (end - start), MPI_LONG, full_buffer, end - start, MPI_LONG, 0, MPI_COMM_WORLD);
-
+     
    get_time(&t2);
+
 
   
    if ((t2.tv_nsec - t1.tv_nsec) < 0) {
@@ -210,15 +187,13 @@ int main (int argc, char *argv[]) {
     time += dt.tv_sec + (double)(dt.tv_nsec)*0.000000001;
 
 
-    finalize(fp, full_buffer ,width,nprocs ,maxiter, time,  x0, y0, size);
-  
+ 
+  finalize(fp, data_msg,width,nprocs ,maxiter, time,  x0, y0, size);
+        
  
 
 
     free(data_msg);
-    if (my_rank == 0) {
-      free(full_buffer);
-    }
    
   
     return 0;
@@ -231,19 +206,16 @@ void finalize(FILE *fp, long *data_msg,int width, int nworkers, int maxiter, dou
     int col;
     int this_row;
     
-    if (fp) {
-      //write output
-      for(this_row = 0; this_row < width; this_row++) {
-          for ( col = 0; col < width; ++col) 
-          {
-              fprintf(fp,"%d, %d, %ld\n",this_row, col, data_msg[this_row*width+col]);
-          }
-      }
+ 
+    //write output
+    for(this_row = 0; this_row < width; this_row++) {
+        for ( col = 0; col < width; ++col) 
+        {
+            fprintf(fp,"%d, %d, %ld\n",this_row, col, data_msg[this_row*width+col]);
+        }
+     }
 
-      fclose(fp);
-
-      printf("I AM RANK 0!!");
-    }
+    fclose(fp);
     /* Produce text output  */
     fprintf(stdout, "\n");
     fprintf(stdout, "Sequential Mandelbrot program\n");
@@ -251,7 +223,7 @@ void finalize(FILE *fp, long *data_msg,int width, int nworkers, int maxiter, dou
     fprintf(stdout, "Maximum iterations, %d\n", maxiter);
     fprintf(stdout, "x0, %lf,y0, %lf, size, %lf\n",x, y, size);
     fprintf(stdout, "Number of pixels, %d * %d =, %d\n", width, width, width*width);
-
+   
     fprintf(stdout,"Program time, %lf\n", time);
   
     fprintf(stdout, "\n");
@@ -267,7 +239,6 @@ void calculate_pixel(int width, int maxiter, long *data_msg, double real_min, do
  int pixel;
  complex z, c;
  int the_row,col;
- #pragma omp parallel for
  for(pixel = start_pixel; pixel < end_pixel; pixel++)
  {
     z.real = z.imag = 0;
@@ -296,7 +267,7 @@ void calculate_pixel(int width, int maxiter, long *data_msg, double real_min, do
 
             /* Scale color and store */
             long color = (long) ((k-1) * scale_color) + min_color;
-            data_msg[pixel-start_pixel] = color;
+            data_msg[the_row*width+col] = color;
  
  }
 

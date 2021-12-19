@@ -1,0 +1,170 @@
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.024579
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.954049
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.961595
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 6.001050
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.021960
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.958007
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.964506
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.995254
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.021792
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.958403
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.964287
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.995272
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.021724
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.951454
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 6.119644
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 6.150428
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.021778
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.953984
+
+
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.964323
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 4
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 5.988119
+

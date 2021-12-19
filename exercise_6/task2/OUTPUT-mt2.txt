@@ -1,0 +1,90 @@
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.551649
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.902086
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.550433
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.901417
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.533322
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.915235
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.549471
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.901823
+
+srun: error: Invalid user id 76607: No error
+srun: Warning: Unable to assume uid=76607
+
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.531368
+
+I AM RANK 0!!
+Sequential Mandelbrot program
+Workers, 2
+Maximum iterations, 10000
+x0, 0.000000,y0, 0.000000, size, 0.750000
+Number of pixels, 1024 * 1024 =, 1048576
+Program time, 21.905841
+
